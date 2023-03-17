@@ -1,7 +1,9 @@
+from typing import Tuple
+
 import numpy as np
 
 
-def calc_simple_metrics(gt: np.array, predictions: np.array, classes: iter) -> tuple[float]:
+def calc_simple_metrics(gt: np.array, predictions: np.array, classes: iter) -> Tuple[float]:
     """
     :param gt: general truth
     :param predictions: predictions of the model, contains classes
