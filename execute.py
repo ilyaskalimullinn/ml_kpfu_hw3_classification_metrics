@@ -3,6 +3,7 @@ from dataset.sportsmans_height import Sportsmanheight
 from metrics.binary_metrics import calc_binary_metrics
 from model.simple_classifier import Classifier
 import pandas as pd
+import copy
 
 
 def pr(metrics_list):
@@ -27,7 +28,26 @@ def pr(metrics_list):
 
     metrics = pd.DataFrame(metrics_list)
 
-    visualisation.plot_precision_recall_curve(metrics, plot_title=f"Precision-Recall curve, AUC is {round(auc, 4)}")
+    visualisation.plot_precision_recall_curve(metrics, plot_title=f"Precision-Recall curve, AUC (Average precision) is {round(auc, 4)}")
+
+
+def roc(metrics_list):
+    metrics_list.sort(key=lambda m: m['FPR'])
+
+    auc = 0
+
+    for i in range(1, len(metrics_list)):
+        metrics_list[i]['recall'] = max(metrics_list[i - 1]['recall'], metrics_list[i]['recall'])
+        auc += (metrics_list[i]['FPR'] - metrics_list[i - 1]['FPR']) * metrics_list[i - 1]['recall']
+
+    metrics_list.insert(0, {
+        'recall': 0,
+        'FPR': 0
+    })
+
+    metrics = pd.DataFrame(metrics_list)
+
+    visualisation.plot_roc_curve(metrics, plot_title=f"Precision-Recall curve, AUC (Average precision) is {round(auc, 4)}")
 
 
 def experiment(gt, confidence):
@@ -46,4 +66,5 @@ if __name__ == '__main__':
 
     metrics_list = experiment(gt, confidence)
 
-    pr(metrics_list)
+    pr(copy.deepcopy(metrics_list))
+    roc(metrics_list)

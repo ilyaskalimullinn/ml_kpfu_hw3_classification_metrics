@@ -9,6 +9,8 @@ class FullBinaryMetrics:
     TN: float
     FP: float
     FN: float
+    FPR: float
+    FNR: float
     accuracy: float
     precision: float
     recall: float
@@ -31,6 +33,9 @@ class FullBinaryMetrics:
             self.precision = TP / (TP + FP)
             self.recall = TP / (TP + FN)
             self.f1_score = 2 * (self.precision * self.recall) / (self.precision + self.recall)
+
+        self.FPR = 0 if FP == 0 else FP / (FP + TN)
+        self.FNR = 0 if FN == 0 else FN / (TP + FN)
 
 
 def calc_binary_metrics(gt: np.array, confidence: np.array, threshold: float = 0.5,
