@@ -2,8 +2,7 @@ import pandas as pd
 from plotly import express as px
 
 
-def plot_precision_recall_curve(metrics: pd.DataFrame, round_digits: int = 2, plot_title: str = 'Precision-Recall curve'):
-    # todo save html
+def plot_precision_recall_curve(metrics: pd.DataFrame, round_digits: int = 2, plot_title: str = 'Precision-Recall curve', save_path: str = None):
 
     round_str = f":.{round_digits}r"
 
@@ -25,9 +24,11 @@ def plot_precision_recall_curve(metrics: pd.DataFrame, round_digits: int = 2, pl
     )
 
     fig.show()
+    if save_path:
+        fig.write_html(save_path)
 
 
-def plot_roc_curve(metrics: pd.DataFrame, round_digits: int = 2, plot_title: str = 'Precision-Recall curve'):
+def plot_roc_curve(metrics: pd.DataFrame, round_digits: int = 2, plot_title: str = 'Precision-Recall curve', save_path: str = None):
     round_str = f":.{round_digits}r"
 
     fig = px.line(
@@ -48,3 +49,5 @@ def plot_roc_curve(metrics: pd.DataFrame, round_digits: int = 2, plot_title: str
     )
 
     fig.show()
+    if save_path:
+        fig.write_html(save_path)

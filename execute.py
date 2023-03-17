@@ -1,9 +1,12 @@
+import copy
+import os
+
+import pandas as pd
+
 import visualisation
 from dataset.sportsmans_height import Sportsmanheight
 from metrics.binary_metrics import calc_binary_metrics
 from model.simple_classifier import Classifier
-import pandas as pd
-import copy
 
 
 def pr(metrics_list):
@@ -28,7 +31,9 @@ def pr(metrics_list):
 
     metrics = pd.DataFrame(metrics_list)
 
-    visualisation.plot_precision_recall_curve(metrics, plot_title=f"Precision-Recall curve, AUC (Average precision) is {round(auc, 4)}")
+    visualisation.plot_precision_recall_curve(metrics,
+                                              plot_title=f"Precision-Recall curve, AUC (Average precision) is {round(auc, 4)}",
+                                              save_path=os.path.join(ROOT_DIR, 'graphs/PR.html'))
 
 
 def roc(metrics_list):
@@ -47,7 +52,9 @@ def roc(metrics_list):
 
     metrics = pd.DataFrame(metrics_list)
 
-    visualisation.plot_roc_curve(metrics, plot_title=f"Precision-Recall curve, AUC (Average precision) is {round(auc, 4)}")
+    visualisation.plot_roc_curve(metrics,
+                                 plot_title=f"Receiver-Operating Characteristic curve, AUC (Average precision) is {round(auc, 4)}",
+                                 save_path=os.path.join(ROOT_DIR, 'graphs/ROC.html'))
 
 
 def experiment(gt, confidence):
@@ -60,6 +67,8 @@ def experiment(gt, confidence):
 
 
 if __name__ == '__main__':
+    ROOT_DIR = os.path.abspath(os.curdir)
+
     dataset = Sportsmanheight()()
     confidence = Classifier()(dataset['height'])
     gt = dataset['class']
