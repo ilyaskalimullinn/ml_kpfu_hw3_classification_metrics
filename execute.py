@@ -14,6 +14,11 @@ def pr(metrics_list):
 
     auc = 0
 
+    metrics_list.insert(0, {
+        'recall': 0,
+        'precision': 0
+    })
+
     for i in range(len(metrics_list) - 1, 0, -1):
         metrics_list[i - 1]['precision'] = max(metrics_list[i - 1]['precision'], metrics_list[i]['precision'])
         # можно было использовать sklearn.metrics.auc, но я проверил, значения практически такие же.
@@ -22,10 +27,6 @@ def pr(metrics_list):
 
     metrics_list.append({
         'recall': 1,
-        'precision': 0
-    })
-    metrics_list.insert(0, {
-        'recall': 0,
         'precision': 0
     })
 
